@@ -1,0 +1,77 @@
+#include <iostream>
+#include <queue>
+
+using namespace std;
+
+class Concert {
+private:
+    queue<int> stuQueue;
+    int totalSeats;
+    int availableSeats;
+
+public:
+    Concert(int numSeats) : totalSeats(numSeats), availableSeats(numSeats) {}
+
+    void addStudents(int numStudents) {
+        if (!isTheaterFull()) {
+            for (int i = 1; i <= numStudents; ++i) {
+                stuQueue.push(i);
+                availableSeats--;
+                cout << "Student " << i << " added to the concert. Seat assigned: " << totalSeats - availableSeats << endl;
+            }
+        } else {
+            cout << "Sorry, the theater is full. Students cannot be added." << endl;
+        }
+    }
+
+    void removeStudents(int numStudents) {
+        if (!stuQueue.empty()) {
+            for (int i = 0; i < numStudents; ++i) {
+                if (!stuQueue.empty()) {
+                    int removedStudent = stuQueue.front();
+                    stuQueue.pop();
+                    availableSeats++;
+                    cout << "Student " << removedStudent << " has left the concert." << endl;
+                } else {
+                    cout << "No more students to remove." << endl;
+                    break;
+                }
+            }
+        } else {
+            cout << "No students in the theater to remove." << endl;
+        }
+    }
+
+    int getAvailableSeats() const {
+        return availableSeats;
+    }
+
+    bool isTheaterFull() const {
+        return availableSeats == 0;
+    }
+};
+
+int main() {
+    int numSeats;
+    cout << "Enter the total number of seats in the concert: ";
+    cin >> numSeats;
+
+    Concert concert(numSeats);
+    int numStudents;
+
+    cout << "Enter the number of students attending: ";
+    cin >> numStudents;
+
+    concert.addStudents(numStudents);
+
+    int numStudentsToRemove;
+    cout << "Enter the number of students to remove: ";
+    cin >> numStudentsToRemove;
+
+    concert.removeStudents(numStudentsToRemove);
+
+    cout << "Remaining seats: " << concert.getAvailableSeats() << endl;
+    cout << "Is theater full? " << (concert.isTheaterFull() ? "Yes" : "No") << endl;
+
+    return 0;
+}
